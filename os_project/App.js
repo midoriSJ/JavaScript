@@ -45,7 +45,8 @@ export default function App() {
 
   const postDataToServer = async (data) => {
     try {
-      await axios.post("http://localhost:3306/api/data", { data });
+      await axios.post("http://127.0.0.1:5000/api/data", { data });
+      console.log('Data posted successfully');
     } catch (error) {
       console.error('Error posting data to server:', error);
     }
