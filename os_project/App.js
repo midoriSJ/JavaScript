@@ -6,40 +6,50 @@ export default function App() {
   const [weatherData, setWeatherData] = useState(null);
   const [airData, setAirData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const fetchWeatherData = async () => {
+    try {
+      const apiKey = '111002b452c141798051161faec61742';
+      const city = 'Cheonan'; // 원하는 도시로 변경하세요.
+      const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+      const response = await axios.get(apiUrl);
+      setWeatherData(response.data);
+      await postDataToServer(response.data); // 수정: 날씨 데이터 전송
+    } catch (error) {
+      console.error('Error fetching weather data:', error);
+    }
+  };
+
+  const fetchAirData = async () => {
+    try {
+      const apiKey = '111002b452c141798051161faec61742';
+      const airUrl = `https://api.openweathermap.org/data/2.5/air_pollution?lat=36.8065&lon=127.1522&appid=${apiKey}&units=metric`
+   
+      const response = await axios.get(airUrl);
+      setAirData(response.data);
+      await postDataToServer(response.data); // 수정: 대기 오염 데이터 전송
+    } catch (error) {
+      console.error('Error fetching air pollution data:', error);
+    }
+  };
 
   useEffect(() => {
-    const fetchWeatherData = async () => {
-      try {
-        const apiKey = '111002b452c141798051161faec61742';
-        const city = 'Cheonan'; // 원하는 도시로 변경하세요.
-        const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
-        const response = await axios.get(apiUrl);
-        setWeatherData(response.data);
-        
-        await axios.post("https://localhost:3306/api/data", { weatherData: response.data, airData });
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching weather data:', error);
-        setLoading(false);
-      }
+    const fetchData = async () => {
+      setLoading(true);
+      await fetchWeatherData();
+      await fetchAirData();
+      setLoading(false);
     };
 
-    const fetchAirData = async () => {
-      try {
-        const apiKey = '111002b452c141798051161faec61742';
-        const airUrl = `https://api.openweathermap.org/data/2.5/air_pollution?lat=36.8065&lon=127.1522&appid=${apiKey}&units=metric`
-     
-        const response = await axios.get(airUrl);
-        setAirData(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching air pollution data:', error);
-        setLoading(false);
-      }
-    };
-    fetchWeatherData();
-    fetchAirData();
+    fetchData();
   }, []);
+
+  const postDataToServer = async (data) => {
+    try {
+      await axios.post("http://localhost:3306/api/data", { data });
+    } catch (error) {
+      console.error('Error posting data to server:', error);
+    }
+  };
 
   if (loading) {
     return (

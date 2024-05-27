@@ -1,14 +1,14 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const mysql = require('mysql');
+import express from 'express';
+import { json } from 'body-parser';
+import { createConnection } from 'mysql';
 
 const app = express();
 const port = 3306;
 
-app.use(bodyParser.json());
+app.use(json());
 
 // MySQL 연결 설정
-const connection = mysql.createConnection({
+const connection = createConnection({
   host: 'localhost',
   user: 'root',
   password: '1234',
