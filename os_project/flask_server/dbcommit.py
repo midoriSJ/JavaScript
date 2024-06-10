@@ -11,6 +11,7 @@ def connect_to_db():
 
 
 def get_weather_data():
+    
     api_key = "111002b452c141798051161faec61742"
     city = "Cheonan"
     url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric"
@@ -46,7 +47,7 @@ def insert_weather_data(cursor, data):
     INSERT INTO weather_data (id, city, temperature, feels_like, temp_min,
     temp_max, humidity, pressure, wind_speed, description)
     VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-    """, (10, data['city'], data['temperature'], data['feels_like'], data['temp_min'],
+    """, (14, data['city'], data['temperature'], data['feels_like'], data['temp_min'],
           data['temp_max'], data['humidity'], data['pressure'],
           data['wind_speed'], data['description']))
 

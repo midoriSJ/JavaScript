@@ -3,8 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
 export default function App() {
-  const [weatherData, setWeatherData] = useState(null);
   const [airData, setAirData] = useState(null);
+  const [weatherData, setWeatherData] = useState(null);
+  
   const [loading, setLoading] = useState(true);
   const fetchWeatherData = async () => {
     try {
